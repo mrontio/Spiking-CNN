@@ -1,6 +1,7 @@
 OUTPUT_DIR = ./bin
-LIBS = -lncpy
-main: main.c
-	gcc ${LIBS} -g -o ${OUTPUT_DIR}/main main.c
-run: main
-	./main
+LIBS = -lcnpy
+${OUTPUT_DIR}/main: main.cpp
+	g++ ${LIBS} -g -o ${OUTPUT_DIR}/main main.cpp
+
+run: ${OUTPUT_DIR}/main
+	${OUTPUT_DIR}/main
