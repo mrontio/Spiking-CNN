@@ -4,9 +4,11 @@
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
-//#include <cnpy.h>
+#include <cnpy.h>
+#include <string>
 
-using Shape4D = std::vector<long unsinged int>;
+using Shape4D = std::vector<long unsigned int>;
+
 template<typename T>
 class Tensor4D {
 private:
@@ -17,7 +19,7 @@ private:
 
 public:
         Tensor4D(size_t dim1, size_t dim2, size_t dim3, size_t dim4);
-        //        Tensor4D(cnpy::NpyArray data);
+        Tensor4D(const cnpy::NpyArray &npy);
 
         T& operator()(size_t i, size_t j, size_t k, size_t l);
         const T& operator()(size_t i, size_t j, size_t k, size_t l) const;
@@ -25,6 +27,9 @@ public:
         size_t size(size_t dim) const;
         auto getShape() const;
         void fill(const T& value);
+        std::string toString() const;
+        std::string shapeString () const;
+
 };
 
 #include "Tensor4D.tpp"
