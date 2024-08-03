@@ -1,7 +1,9 @@
 OUTPUT_DIR = ./bin
 LIBS = -lcnpy
-${OUTPUT_DIR}/main: main.cpp
-	g++ ${LIBS} -g -o ${OUTPUT_DIR}/main main.cpp
+FLAGS = -g
+
+${OUTPUT_DIR}/main: main.cpp Tensor4D.tpp
+	g++ ${LIBS} ${FLAGS} -o ${OUTPUT_DIR}/main main.cpp
 
 run: ${OUTPUT_DIR}/main
 	${OUTPUT_DIR}/main
