@@ -14,5 +14,6 @@ int main() {
         cout << t.shapeString() << endl;
         cout << t(0,0,0,0) << endl;
         cout << t(0,1,0,1) << endl;
+        cout << t(7,1,2,2) << endl;
         return 0;
 }
