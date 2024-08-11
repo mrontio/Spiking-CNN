@@ -4,16 +4,18 @@
 
 //#include "conv.hpp"
 #include "Tensor4D.h"
+#include "Convolutional.h"
+
 using namespace std;
-
-
 
 int main() {
         cnpy::NpyArray data = cnpy::npy_load("./weights.npy");
-        auto t = Tensor4D<float>{data};
-        cout << t.shapeString() << endl;
-        cout << t(0,0,0,0) << endl;
-        cout << t(0,1,0,1) << endl;
-        cout << t(7,1,2,2) << endl;
+        auto conv_weights = Tensor4D{data};
+        auto x = Tensor4D(8,2,3,3);
+        x.fill(1.0);
+
+        auto conv2d = Convolutional(conv_weights, 1, vector<int>{1, 1});
+        conv2d.forward(conv_weights);
+
         return 0;
 }
