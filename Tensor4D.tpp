@@ -10,7 +10,7 @@ using namespace std;
 #include "Tensor4D.h"
 
 Tensor4D::Tensor4D(size_t dim1, size_t dim2, size_t dim3, size_t dim4)
-        : shape(Shape4D{dim1, dim2, dim3, dim4}),
+        : shape(TensorShape{dim1, dim2, dim3, dim4}),
           data(dim1 * dim2 * dim3 * dim4)
 {}
 

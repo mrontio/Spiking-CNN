@@ -7,12 +7,12 @@
 #include <cnpy.h>
 #include <string>
 
-using Shape4D = std::vector<long unsigned int>;
+using TensorShape = std::vector<long unsigned int>;
 
 class Tensor4D {
 private:
         std::vector<float> data;
-        Shape4D shape;
+        TensorShape shape;
 
         size_t getIndex(size_t i, size_t j, size_t k, size_t l) const;
 
