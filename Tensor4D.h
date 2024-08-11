@@ -11,8 +11,8 @@ using TensorShape = std::vector<long unsigned int>;
 
 class Tensor4D {
 private:
-        std::vector<float> data;
-        TensorShape shape;
+        std::vector<float> data_;
+        TensorShape shape_;
 
         size_t getIndex(size_t i, size_t j, size_t k, size_t l) const;
 
@@ -24,7 +24,7 @@ public:
         const float& operator()(size_t i, size_t j, size_t k, size_t l) const;
 
         size_t size(size_t dim) const;
-        auto getShape() const;
+        TensorShape getShape() const;
         void fill(const float& value);
         std::string toString() const;
         std::string shapeString () const;
