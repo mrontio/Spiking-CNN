@@ -14,9 +14,7 @@ int main() {
         x.fill(1.0);
 
         auto conv2d = Convolutional(conv_weights, 1, {1, 1});
-        // auto conv2d.forward(x);
-
-
+        auto convolution = conv2d.forward(x);
 
         return 0;
 }
