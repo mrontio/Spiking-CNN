@@ -13,28 +13,31 @@ Convolutional::Convolutional(Tensor4D& weights, int stride, vector<int> padding)
         padding_buffer_()
 {
         weights_ = weights;
-        padding_buffer_ = Tensor4D(1, channels_in_,
-                                   input_shape_[0] + 2*padding_[0],
-                                   input_shape_[1] + 2*padding_[1]);
+        padding_buffer_.resize(input_shape_[0] + 2*padding_[0]);
+        for (int i = 0; i < padding_buffer_.size(); i++) {
+                padding_buffer_[i].resize(input_shape_[1] + 2*padding_[1]);
+        }
 }
 
 Tensor4D* Convolutional::forward(const Tensor4D& input)
 {
+
+        fill_padding_buffer(input, 0, 0);
+
+        return NULL;
+}
+
+
+void Convolutional::fill_padding_buffer(const Tensor4D& input, int c_out, int c_in) {
         auto input_shape = input.getShape();
         assert((input_shape[0] == input_shape_[0], "convolutional input x shape mismatch!"));
-        assert((input_shape[1] == input_shape_[1], "convolutional input x shape mismatch!"));
-        auto buffer = padding_buffer_.buffer();
+        assert((input_shape[1] == input_shape_[1], "convolutional input y shape mismatch!"));
 
-        int q = 0;
         for (int i = 0; i < input_shape[2]; i++) {
                 auto i_pad = i + padding_[0];
                 for (int j = 0; j < input_shape[3]; j++) {
                         auto j_pad = j + padding_[1];
-                        buffer[0, 0, i_pad, j_pad] = input(0, 0, i, j);
-                        q++;
+                        padding_buffer_[i_pad][j_pad] = input(c_out, c_in, i, j);
                 }
         }
-
-        cout << padding_buffer_.toString() << endl;
-        return NULL;
 }

@@ -34,7 +34,6 @@ Tensor4D::Tensor4D(const cnpy::NpyArray& npy)
 Tensor4D::Tensor4D(const Tensor4D& source)
         : shape_(source.getShape())
 {
-        cout << "PLEASE!!!" << endl;
         const float* data = source.data();
         data_= std::vector<float>(data, data+ (shape_[0] * shape_[1] * shape_[2] * shape_[3]));
 }

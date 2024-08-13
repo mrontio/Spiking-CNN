@@ -10,6 +10,7 @@ class Convolutional {
 public:
         Convolutional(Tensor4D& weights, int stride, vector<int> padding);
         Tensor4D* forward(const Tensor4D& input);
+
 private:
         int kernel_size_;
         int stride_;
@@ -18,8 +19,11 @@ private:
         int channels_out_;
         vector<int> input_shape_;
         Tensor4D weights_;
-        Tensor4D padding_buffer_;
+        vector<vector<float>> padding_buffer_;
         //vector<int> INPUT_SHAPE = vector<int>{34, 34};
+
+        void fill_padding_buffer(const Tensor4D& input, int c_out, int c_in);
+
 };
 
 #include "Convolutional.tpp"
