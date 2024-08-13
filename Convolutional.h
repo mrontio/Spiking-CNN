@@ -23,6 +23,7 @@ private:
         //vector<int> INPUT_SHAPE = vector<int>{34, 34};
 
         void fill_padding_buffer(const Tensor4D& input, int c_out, int c_in);
+        float apply_kernel(int k, int l, int i, int j);
 
 };
 
