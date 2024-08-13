@@ -17,9 +17,9 @@ private:
         int channels_in_;
         int channels_out_;
         vector<int> input_shape_;
-        Tensor4D& weights_;
-        vector<vector<float>> padding_buffer_;
-        vector<int> INPUT_SHAPE = vector<int>{34, 34};
+        Tensor4D weights_;
+        Tensor4D padding_buffer_;
+        //vector<int> INPUT_SHAPE = vector<int>{34, 34};
 };
 
 #include "Convolutional.tpp"

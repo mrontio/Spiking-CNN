@@ -9,6 +9,12 @@ using namespace std;
 
 #include "Tensor4D.h"
 
+
+Tensor4D::Tensor4D()
+        : shape_(TensorShape{0,0,0,0}),
+          data_()
+{}
+
 Tensor4D::Tensor4D(size_t dim1, size_t dim2, size_t dim3, size_t dim4)
         : shape_(TensorShape{dim1, dim2, dim3, dim4}),
           data_(dim1 * dim2 * dim3 * dim4)
@@ -21,8 +27,16 @@ Tensor4D::Tensor4D(const cnpy::NpyArray& npy)
                 throw std::out_of_range("NpyArray is not 4-dimensional");
         }
 
-        const float* elements = npy.data_<float>();
+        const float* elements = npy.data<float>();
         data_ = std::vector<float>(elements, elements + (shape_[0] * shape_[1] * shape_[2] * shape_[3]));
+}
+
+Tensor4D::Tensor4D(const Tensor4D& source)
+        : shape_(source.getShape())
+{
+        cout << "PLEASE!!!" << endl;
+        const float* data = source.data();
+        data_= std::vector<float>(data, data+ (shape_[0] * shape_[1] * shape_[2] * shape_[3]));
 }
 
 size_t Tensor4D::getIndex(size_t i, size_t j, size_t k, size_t l) const {
@@ -52,6 +66,10 @@ size_t Tensor4D::size(size_t dim) const {
 
 TensorShape Tensor4D::getShape() const {
         return shape_;
+}
+
+float const * Tensor4D::data() const {
+        return data_.data();
 }
 
 void Tensor4D::fill(const float& value) {
