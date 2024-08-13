@@ -7,7 +7,8 @@
 #include <cnpy.h>
 #include <string>
 
-using TensorShape = std::vector<long unsigned int>;
+using shape = long unsigned int;
+using TensorShape = std::vector<shape>;
 
 class Tensor {
 private:
@@ -20,14 +21,16 @@ private:
 
 public:
         Tensor();
-        Tensor(TensorShape dims);
+        Tensor(const TensorShape dims);
         Tensor(const cnpy::NpyArray &npy);
         Tensor(const Tensor& source);
 
         float& operator[](TensorShape dims);
         const float operator[](TensorShape dims) const;
 
-        TensorShape shape() const;
+        const TensorShape shape() const ;
+        const long unsigned int shape(int idx) const;
+
         std::string shapeString () const;
         void fill(const float& value);
 

@@ -16,7 +16,7 @@ Tensor::Tensor()
           N_(0)
 {}
 
-Tensor::Tensor(TensorShape dims)
+Tensor::Tensor(const TensorShape dims)
         : shape_(dims),
           N_(dims.size())
 {
@@ -40,8 +40,8 @@ Tensor::Tensor(const cnpy::NpyArray& npy)
 }
 
 Tensor::Tensor(const Tensor& source)
-        : shape_(source.getShape()),
-          N_(source.getShape().size())
+        : shape_(source.shape()),
+          N_(source.shape().size())
 {
         const float* data = source.data();
         data_= std::vector<float>(data, data+ (shape_[0] * shape_[1] * shape_[2] * shape_[3]));
@@ -77,8 +77,12 @@ const float Tensor::operator[](TensorShape dims) const
         return data_[this->getIndex(dims)];
 }
 
-TensorShape Tensor::shape() const {
+const TensorShape Tensor::shape() const {
         return shape_;
+}
+
+const long unsigned int Tensor::shape(int idx) const {
+        return shape_[idx];
 }
 
 float const * Tensor::data() const {

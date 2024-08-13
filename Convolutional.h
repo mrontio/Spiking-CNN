@@ -4,28 +4,26 @@
 #include <iostream>
 #include <assert.h>
 
-#include "Tensor4D.h"
-
-using Vector3D = vector<vector<vector<float>>>;
+#include "Tensor.h"
 
 class Convolutional {
 public:
-        Convolutional(Tensor4D& weights, int stride, vector<int> padding);
-        vector<vector<vector<float>>>* forward(const Tensor4D& input);
+        Convolutional(Tensor weights, shape stride, vector<shape> padding);
+        // vector<vector<vector<float>>>* forward(const Tensor& input);
 
 private:
-        int kernel_size_;
-        int stride_;
-        vector<int> padding_;
-        int channels_in_;
-        int channels_out_;
-        vector<int> input_shape_;
-        Tensor4D weights_;
-        Vector3D padding_buffer_;
+        shape kernel_size_;
+        shape stride_;
+        vector<shape> padding_;
+        shape channels_in_;
+        shape channels_out_;
+        vector<shape> input_shape_;
+        Tensor weights_;
+        Tensor padding_buffer_;
 
-        void fill_padding_buffer(const Tensor4D& input, int c_out, int c_in);
-        float apply_kernel(int k, int l, int i, int j);
-        void initialise_vector3d(Vector3D* v, int a, int b, int c);
+        // void fill_padding_buffer(const Tensor& input, int c_out, int c_in);
+        // float apply_kernel(int k, int l, int i, int j);
+        // void initialise_vector3d(Vector3D* v, int a, int b, int c);
 };
 
 #include "Convolutional.tpp"
