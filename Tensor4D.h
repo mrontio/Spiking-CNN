@@ -31,6 +31,7 @@ public:
         std::string toString() const;
         std::string shapeString () const;
         const float* data() const;
+        const std::vector<float>& buffer();
 
 };
 

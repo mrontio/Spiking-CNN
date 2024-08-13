@@ -72,6 +72,10 @@ float const * Tensor4D::data() const {
         return data_.data();
 }
 
+const std::vector<float>& Tensor4D::buffer() {
+        return data_;
+}
+
 void Tensor4D::fill(const float& value) {
     std::fill(data_.begin(), data_.end(), value);
 }
