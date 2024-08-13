@@ -14,8 +14,8 @@ private:
         int kernel_size_;
         int stride_;
         vector<int> padding_;
-        int channels_in;
-        int channels_out;
+        int channels_in_;
+        int channels_out_;
         vector<int> input_shape_;
         Tensor4D& weights_;
         vector<vector<float>> padding_buffer_;
