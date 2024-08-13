@@ -6,10 +6,12 @@
 
 #include "Tensor4D.h"
 
+using Vector3D = vector<vector<vector<float>>>;
+
 class Convolutional {
 public:
         Convolutional(Tensor4D& weights, int stride, vector<int> padding);
-        Tensor4D* forward(const Tensor4D& input);
+        vector<vector<vector<float>>>* forward(const Tensor4D& input);
 
 private:
         int kernel_size_;
@@ -19,12 +21,11 @@ private:
         int channels_out_;
         vector<int> input_shape_;
         Tensor4D weights_;
-        vector<vector<float>> padding_buffer_;
-        //vector<int> INPUT_SHAPE = vector<int>{34, 34};
+        Vector3D padding_buffer_;
 
         void fill_padding_buffer(const Tensor4D& input, int c_out, int c_in);
         float apply_kernel(int k, int l, int i, int j);
-
+        void initialise_vector3d(Vector3D* v, int a, int b, int c);
 };
 
 #include "Convolutional.tpp"
