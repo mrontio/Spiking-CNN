@@ -36,9 +36,8 @@ public:
 
         const bool operator==(const Tensor& other) const;
 
-
-
         const float* data() const;
+        const std::vector<float>& vector() const;
 
 };
 

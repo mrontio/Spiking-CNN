@@ -24,7 +24,7 @@ Tensor::Tensor(const TensorShape dims)
         for (int n = 0; n < N_; n++) {
                 size *= dims[n];
         }
-        data_ = vector<float>(size);
+        data_ = std::vector<float>(size);
 }
 
 Tensor::Tensor(const cnpy::NpyArray& npy)
@@ -92,6 +92,10 @@ const long unsigned int Tensor::shape(int idx) const {
 
 float const * Tensor::data() const {
         return data_.data();
+}
+
+const std::vector<float>& Tensor::vector() const {
+        return data_;
 }
 
 void Tensor::fill(const float& value) {
