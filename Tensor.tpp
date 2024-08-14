@@ -79,7 +79,7 @@ const float Tensor::operator[](TensorShape dims) const
 
 const bool Tensor::operator==(const Tensor& other) const
 {
-        return *this == other;
+        return this->data_ == other.vector();
 }
 
 const TensorShape Tensor::shape() const {
