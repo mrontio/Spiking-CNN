@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <cnpy.h>
+#include <cmath>
 
 using namespace std;
 
@@ -80,6 +81,21 @@ const float Tensor::operator[](TensorShape dims) const
 const bool Tensor::operator==(const Tensor& other) const
 {
         return this->data_ == other.vector();
+}
+
+const bool Tensor::precisionEqual(const Tensor& other, const int precision) const
+{
+        auto ours = data_;
+        auto theirs = other.vector();
+        float p = pow(10, -p);
+        bool correct = true;
+        for (int i = 0; i < data_.size(); i++) {
+                bool correct = std::fabs(ours[i] - theirs[i]) < p;
+                if (!correct) {
+                        return false;
+                }
+        }
+        return true;
 }
 
 const TensorShape Tensor::shape() const {

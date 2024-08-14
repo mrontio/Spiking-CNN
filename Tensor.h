@@ -35,6 +35,7 @@ public:
         void fill(const float& value);
 
         const bool operator==(const Tensor& other) const;
+        const bool precisionEqual(const Tensor& other, const int precision) const;
 
         const float* data() const;
         const std::vector<float>& vector() const;
