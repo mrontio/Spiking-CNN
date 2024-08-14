@@ -77,6 +77,11 @@ const float Tensor::operator[](TensorShape dims) const
         return data_[this->getIndex(dims)];
 }
 
+const bool Tensor::operator==(const Tensor& other) const
+{
+        return *this == other;
+}
+
 const TensorShape Tensor::shape() const {
         return shape_;
 }

@@ -34,6 +34,9 @@ public:
         std::string shapeString () const;
         void fill(const float& value);
 
+        const bool operator==(const Tensor& other) const;
+
+
 
         const float* data() const;
 
