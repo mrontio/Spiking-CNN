@@ -8,5 +8,6 @@ stdenv.mkDerivation {
   buildInputs = [
     cnpy
     zlib
+    gdb
   ];
 }
