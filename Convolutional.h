@@ -22,7 +22,7 @@ private:
         Tensor padding_buffer_;
 
         void fill_padding_buffer(const Tensor& input, shape c_out, shape c_in);
-        float apply_kernel(shape k, shape l, shape i, shape j);
+        float apply_kernel(shape l, shape i, shape j);
 };
 
 #include "Convolutional.tpp"
