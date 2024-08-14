@@ -52,9 +52,9 @@ Tensor::Tensor(const Tensor& source)
 
 size_t Tensor::getIndex(TensorShape dims) const
 {
-        int v_index = 0;
-        for (int i = 0; i < N_; ++i) {
-                v_index += dims[i] * shape_[i];
+        int v_index = dims[0];
+        for (int i = 1; i < N_; ++i) {
+                v_index = v_index * shape_[i] + dims[i];
         }
         return v_index;
 }
