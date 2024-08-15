@@ -4,29 +4,25 @@
 
 #include "Tensor.h"
 #include "Convolutional.h"
+#include "IntegrateFire.h"
 
 using namespace std;
 
 int main() {
-        cnpy::NpyArray data = cnpy::npy_load("./weights.npy");
+        cnpy::NpyArray data = cnpy::npy_load("./weights/conv-weights.npy");
         auto conv_weights = Tensor(data);
         auto x = Tensor(TensorShape{8,2,34,34});
         x.fill(1.0);
 
         auto conv2d = Convolutional(conv_weights, 1, {1, 1});
-        auto mine = conv2d.forward(x);
+        auto conv_out = conv2d.forward(x);
 
-        cnpy::NpyArray theirs_npy = cnpy::npy_load("./theirs.npy");
-        cnpy::NpyArray mine_npy = cnpy::npy_load("./mine.npy");
-        auto torch = Tensor(theirs_npy);
-        auto py = Tensor(mine_npy);
+        auto if_layer = IntegrateFire((*conv_out).shape());
+        auto if_out = if_layer.forward((*conv_out));
 
-        auto idx = TensorShape{0,0,0};
-        cout << torch[idx] << endl;
-        cout << py[idx] << endl;
-        cout << (*mine)[idx] << endl;
+        auto torch_output = Tensor(cnpy::npy_load("./tensors/if-torch.npy"));
 
-        cout << (mine->precisionEqual(torch, 5)) << endl;
+        cout << ((*if_out) == torch_output) << endl;
 
         return 0;
 }
