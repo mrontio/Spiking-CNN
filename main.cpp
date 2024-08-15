@@ -22,7 +22,9 @@ int main() {
 
         auto torch_output = Tensor(cnpy::npy_load("./tensors/if-torch.npy"));
 
-        cout << ((*if_out) == torch_output) << endl;
+        if_out->flatten();
+
+        cout << if_out->shapeString() << endl;
 
         return 0;
 }

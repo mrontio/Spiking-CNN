@@ -13,11 +13,11 @@ using TensorShape = std::vector<shape>;
 class Tensor {
 private:
         TensorShape shape_;
-        unsigned int N_;
         std::vector<float> data_;
 
 
         size_t getIndex(TensorShape dims) const;
+        size_t getSize(TensorShape dims) const;
 
 public:
         Tensor();
@@ -30,6 +30,8 @@ public:
 
         const TensorShape shape() const ;
         const long unsigned int shape(int idx) const;
+        Tensor& reshape(const TensorShape shape);
+        Tensor& flatten();
 
         std::string shapeString () const;
         void fill(const float& value);

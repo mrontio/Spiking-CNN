@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cnpy.h>
 #include <cmath>
+#include <format>
 
 using namespace std;
 
@@ -13,56 +14,71 @@ using namespace std;
 
 Tensor::Tensor()
         : shape_(TensorShape()),
-          data_(),
-          N_(0)
+          data_()
 {}
 
 Tensor::Tensor(const TensorShape dims)
-        : shape_(dims),
-          N_(dims.size())
+        : shape_(dims)
 {
         int size = 1;
-        for (int n = 0; n < N_; n++) {
+        for (int n = 0; n < shape_.size(); n++) {
                 size *= dims[n];
         }
         data_ = std::vector<float>(size);
 }
 
+
 Tensor::Tensor(const cnpy::NpyArray& npy)
-        : shape_(npy.shape),
-        N_(npy.shape.size())
+        : shape_(npy.shape)
 {
-        int size = 1;
-        for (int i = 0; i < N_; ++i) {
-                size *= shape_[i];
-        }
+        auto size = getSize(shape_);
+
         const float* elements = npy.data<float>();
         data_ = std::vector<float>(elements, elements + size );
 }
 
 Tensor::Tensor(const Tensor& source)
-        : shape_(source.shape()),
-          N_(source.shape().size())
+        : shape_(source.shape())
 {
         const float* data = source.data();
         data_= std::vector<float>(data, data+ (shape_[0] * shape_[1] * shape_[2] * shape_[3]));
 }
 
 
+Tensor& Tensor::reshape(const TensorShape shape) {
+        auto size = getSize(shape);
+        if (size != data_.size()) {
+                throw std::runtime_error("shape : element mismatch");
+        }
+        shape_ = shape;
+        return *this;
+}
 
+Tensor& Tensor::flatten() {
+        shape_ = TensorShape{getSize(shape_)};
+        return *this;
+}
 
 size_t Tensor::getIndex(TensorShape dims) const
 {
         int v_index = dims[0];
-        for (int i = 1; i < N_; ++i) {
+        for (int i = 1; i < shape_.size(); ++i) {
                 v_index = v_index * shape_[i] + dims[i];
         }
         return v_index;
 }
 
+inline size_t Tensor::getSize(TensorShape dims) const {
+        int size = 1;
+        for (int i = 0; i < shape_.size(); ++i) {
+                size *= shape_[i];
+        }
+        return size;
+}
+
 float& Tensor::operator[](TensorShape dims)
 {
-        if (dims.size() != N_) {
+        if (dims.size() != shape_.size()) {
                 throw std::out_of_range("Tensor index out of range");
         }
 
@@ -71,7 +87,7 @@ float& Tensor::operator[](TensorShape dims)
 
 const float Tensor::operator[](TensorShape dims) const
 {
-        if (dims.size() != N_) {
+        if (dims.size() != shape_.size()) {
                 throw std::out_of_range("Tensor index out of range");
         }
 
@@ -121,7 +137,7 @@ void Tensor::fill(const float& value) {
 std::string Tensor::shapeString() const {
         std::ostringstream os;
         os << "(";
-        for (int i = 0; i < N_; ++i) {
+        for (int i = 0; i < shape_.size(); ++i) {
                 os << shape_[i]<< ",";
         }
         os << ")";
