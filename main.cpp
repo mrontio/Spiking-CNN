@@ -5,12 +5,14 @@
 #include "Tensor.h"
 #include "Convolutional.h"
 #include "IntegrateFire.h"
+#include "AvgPool.h"
 
 using namespace std;
 
 int main() {
-        cnpy::NpyArray data = cnpy::npy_load("./weights/conv-weights.npy");
-        auto conv_weights = Tensor(data);
+        auto conv_weights = Tensor(cnpy::npy_load("./weights/conv-weights.npy"));
+        auto torch_output = Tensor(cnpy::npy_load("./tensors/if-torch.npy"));
+
         auto x = Tensor(TensorShape{8,2,34,34});
         x.fill(1.0);
 
@@ -20,11 +22,10 @@ int main() {
         auto if_layer = IntegrateFire((*conv_out).shape());
         auto if_out = if_layer.forward((*conv_out));
 
-        auto torch_output = Tensor(cnpy::npy_load("./tensors/if-torch.npy"));
+        auto avgpool = AvgPool(2, 2, 0);
+        auto pool_out = avgpool.forward(*if_out);
 
-        if_out->flatten();
-
-        cout << if_out->shapeString() << endl;
+        cout << pool_out->shapeString() << endl;
 
         return 0;
 }
