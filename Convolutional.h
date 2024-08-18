@@ -21,7 +21,8 @@ private:
         Tensor weights_;
         Tensor padding_buffer_;
 
-        void fill_padding_buffer(const Tensor& input, shape c_out, shape c_in);
+        void fill_padding_buffer(const Tensor& input, shape c_in);
+
         float apply_kernel(shape l, shape i, shape j);
 };
 

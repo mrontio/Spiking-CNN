@@ -23,7 +23,7 @@ Tensor* Convolutional::forward(const Tensor& input)
         auto input_shape = input.shape();
         // Fills padding_buffer_ with 0s and input
         // 0 is for channels_out, we keep as 0 for now
-        fill_padding_buffer(input, 0, channels_in_);
+        fill_padding_buffer(input, channels_in_);
 
         auto output = new Tensor(TensorShape{channels_out_, input_shape[2], input_shape[3]});
 
@@ -59,13 +59,13 @@ inline float Convolutional::apply_kernel(shape l, shape i, shape j) {
         return output;
 }
 
-void Convolutional::fill_padding_buffer(const Tensor& input, shape c_out, shape c_in) {
+void Convolutional::fill_padding_buffer(const Tensor& input, shape c_in) {
         for (shape c = 0; c < c_in; ++c) {
                 for (shape i = 0; i < input_shape_[2]; i++) {
                         shape i_pad = i + padding_[0];
                         for (shape j = 0; j < input_shape_[3]; j++) {
                                 shape  j_pad = j + padding_[1];
-                                auto input_idx = TensorShape{c_out, c, i, j};
+                                auto input_idx = TensorShape{0, c, i, j};
                                 auto pad_idx = TensorShape{c,i_pad,j_pad};
                                 padding_buffer_[pad_idx] = input[input_idx];
                         }
