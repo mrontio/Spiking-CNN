@@ -127,9 +127,13 @@ const bool Tensor::operator==(const Tensor& other) const
 
 const bool Tensor::precisionEqual(const Tensor& other, const int precision) const
 {
+        if (data_.size() != other.size()) {
+                cout << "precisionEqual: size mismatch " << data_.size() << ", " << other.size() << endl;
+                return false;
+        }
         auto ours = data_;
         auto theirs = other.vector();
-        float p = pow(10, -p);
+        float p = float(pow(10, -precision));
         bool correct = true;
         for (int i = 0; i < data_.size(); i++) {
                 bool correct = std::fabs(ours[i] - theirs[i]) < p;
