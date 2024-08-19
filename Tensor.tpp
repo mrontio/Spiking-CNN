@@ -13,7 +13,7 @@ Tensor::Tensor(const std::string path)
         const float* elements = npy.data<float>();
 
         shape_ = npy.shape;
-        data_ = std::vector<float>(elements, elements + this->size());
+        data_ = std::vector<float>(elements, elements + getSize(shape_));
 }
 
 Tensor::Tensor(const TensorShape dims)
@@ -31,14 +31,14 @@ Tensor::Tensor(const cnpy::NpyArray& npy)
         : shape_(npy.shape)
 {
         const float* elements = npy.data<float>();
-        data_ = std::vector<float>(elements, elements + this->size());
+        data_ = std::vector<float>(elements, elements + getSize(shape_));
 }
 
 Tensor::Tensor(const Tensor& source)
         : shape_(source.shape())
 {
         const float* data = source.data();
-        data_= std::vector<float>(data, data + this->size());
+        data_= std::vector<float>(data, data + getSize(shape_));
 }
 
 Tensor::Tensor(const float* source, const TensorShape shape)
