@@ -41,6 +41,11 @@ Tensor::Tensor(const Tensor& source)
         data_= std::vector<float>(data, data + this->size());
 }
 
+Tensor::Tensor(const float* source, const TensorShape shape)
+        : shape_(shape)
+{
+        data_ = std::vector<float>(source, source + getSize(shape));
+}
 
 Tensor& Tensor::reshape(const TensorShape shape)
 {
@@ -86,6 +91,35 @@ const float Tensor::operator[](TensorShape dims) const
         return data_[this->getIndex(dims)];
 }
 
+/**
+   Sub-tensor operator.
+   This returns a a pointer to a sub-tensor.
+   @shape dimensions must be less than that of the parent tensor.
+ */
+Tensor* Tensor::operator()(TensorShape shape) {
+        auto dim_n = shape.size();
+        auto dim_diff =  shape_.size() - dim_n;
+        if (dim_diff < 0) {
+                throw std::out_of_range("Sub-tensor dimensions are bigger than parent tensor!");
+        }
+
+        auto begin = shape;
+        auto end =  shape;
+        auto new_shape = TensorShape{};
+        for (int i = dim_n; i < shape_.size(); ++i) {
+                begin.emplace_back(0);
+                end.emplace_back(shape_[i] - 1);
+                new_shape.emplace_back(shape_[i]);
+        }
+        if (dim_diff == 0) new_shape = TensorShape{1};
+
+        float* beginp = data_.data() + getIndex(begin);
+        auto output = new Tensor(beginp, new_shape);
+
+        return output;
+
+}
+
 const bool Tensor::operator==(const Tensor& other) const
 {
         return this->data_ == other.vector();
@@ -115,7 +149,7 @@ const long unsigned int Tensor::shape(int idx) const {
 }
 
 const size_t Tensor::size() const {
-        return data_.size;
+        return data_.size();
 }
 
 const size_t Tensor::getSize(const TensorShape shape) const
@@ -147,4 +181,11 @@ std::string Tensor::shapeString() const {
         }
         os << ")";
         return os.str();
+}
+
+void Tensor::fillDebug()
+{
+        for (int i = 0; i < data_.size(); i++) {
+                data_[i] = i;
+        }
 }

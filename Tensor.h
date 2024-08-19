@@ -30,9 +30,12 @@ public:
         Tensor(const std::string);
         Tensor(const cnpy::NpyArray &npy);
         Tensor(const Tensor& source);
+        Tensor(const float* source, const TensorShape shape);
 
         float& operator[](TensorShape dims);
         const float operator[](TensorShape dims) const;
+
+        Tensor* operator()(TensorShape shape);
 
         const TensorShape shape() const ;
         const long unsigned int shape(int idx) const;
@@ -49,6 +52,9 @@ public:
 
         const float* data() const;
         const std::vector<float>& vector() const;
+
+        void fillDebug();
+
 
 };
 
