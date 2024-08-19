@@ -13,8 +13,7 @@ Tensor::Tensor(const std::string path)
         const float* elements = npy.data<float>();
 
         shape_ = npy.shape;
-        auto size = getSize(shape_);
-        data_ = std::vector<float>(elements, elements + size );
+        data_ = std::vector<float>(elements, elements + this->size());
 }
 
 Tensor::Tensor(const TensorShape dims)
@@ -31,23 +30,22 @@ Tensor::Tensor(const TensorShape dims)
 Tensor::Tensor(const cnpy::NpyArray& npy)
         : shape_(npy.shape)
 {
-        auto size = getSize(shape_);
-
         const float* elements = npy.data<float>();
-        data_ = std::vector<float>(elements, elements + size );
+        data_ = std::vector<float>(elements, elements + this->size());
 }
 
 Tensor::Tensor(const Tensor& source)
         : shape_(source.shape())
 {
         const float* data = source.data();
-        data_= std::vector<float>(data, data+ (shape_[0] * shape_[1] * shape_[2] * shape_[3]));
+        data_= std::vector<float>(data, data + this->size());
 }
 
 
-Tensor& Tensor::reshape(const TensorShape shape) {
+Tensor& Tensor::reshape(const TensorShape shape)
+{
         auto size = getSize(shape);
-        if (size != data_.size()) {
+        if (size != this->size()) {
                 throw std::runtime_error("shape : element mismatch");
         }
         shape_ = shape;
@@ -68,13 +66,7 @@ size_t Tensor::getIndex(TensorShape dims) const
         return v_index;
 }
 
-inline size_t Tensor::getSize(TensorShape dims) const {
-        int size = 1;
-        for (int i = 0; i < shape_.size(); ++i) {
-                size *= shape_[i];
-        }
-        return size;
-}
+
 
 float& Tensor::operator[](TensorShape dims)
 {
@@ -120,6 +112,19 @@ const TensorShape Tensor::shape() const {
 
 const long unsigned int Tensor::shape(int idx) const {
         return shape_[idx];
+}
+
+const size_t Tensor::size() const {
+        return data_.size;
+}
+
+const size_t Tensor::getSize(const TensorShape shape) const
+{
+        int size = 1;
+        for (int i = 0; i < shape.size(); ++i) {
+                size *= shape[i];
+        }
+        return size;
 }
 
 float const * Tensor::data() const {

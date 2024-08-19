@@ -22,7 +22,7 @@ private:
 
 
         size_t getIndex(TensorShape dims) const;
-        size_t getSize(TensorShape dims) const;
+        const size_t getSize(const TensorShape shape) const;
 
 public:
         Tensor();
@@ -36,6 +36,8 @@ public:
 
         const TensorShape shape() const ;
         const long unsigned int shape(int idx) const;
+        const size_t size() const;
+
         Tensor& reshape(const TensorShape shape);
         Tensor& flatten();
 
