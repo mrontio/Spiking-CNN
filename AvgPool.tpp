@@ -39,21 +39,23 @@ void AvgPool::fill_padding_buffer(const Tensor& input, shape c_in) {
                         shape i_pad = i + padding_;
                         for (shape j = 0; j < input_shape_[2]; j++) {
                                 shape  j_pad = j + padding_;
-                                auto input_idx = TensorShape{0, c, i, j};
+                                auto input_idx = TensorShape{c, i, j};
                                 auto pad_idx = TensorShape{c,i_pad,j_pad};
                                 padding_buffer_[pad_idx] = input[input_idx];
                         }
                 }
         }
+
 }
 
 
 inline float AvgPool::apply_kernel(const Tensor& input, shape c, shape i, shape j) {
         float out = 0.0f;
-        for (shape m; m < kernel_; ++m) {
-                for (shape n; n < kernel_; ++n) {
+        for (shape m = 0; m < kernel_; ++m) {
+                for (shape n = 0; n < kernel_; ++n) {
                         out += input[TensorShape{c, stride_ * i + m, stride_ * j + n}];
                 }
         }
-        return (1 / (kernel_ * kernel_)) * out;
+        out = (1 / (float(kernel_) * float(kernel_))) * out;
+        return out;
 }

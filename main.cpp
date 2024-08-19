@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
         auto conv_weights = Tensor(cnpy::npy_load("./weights/conv-weights.npy"));
-        auto torch_output = Tensor(cnpy::npy_load("./tensors/if-torch.npy"));
+        auto torch_output = Tensor(cnpy::npy_load("./tensors/pool-torch.npy"));
 
         auto x = Tensor(TensorShape{8,2,34,34});
         x.fill(1.0);
@@ -25,7 +25,8 @@ int main() {
         auto avgpool = AvgPool(2, 2, 0);
         auto pool_out = avgpool.forward(*if_out);
 
-        cout << pool_out->shapeString() << endl;
+
+        cout << pool_out->precisionEqual(torch_output, 8) << endl;
 
         return 0;
 }
