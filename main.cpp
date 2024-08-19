@@ -1,5 +1,3 @@
-// test.cpp
-//#include <cnpy.h>
 #include <iostream>
 
 #include "Tensor.h"
@@ -10,10 +8,10 @@
 using namespace std;
 
 int main() {
-        auto conv_weights = Tensor(cnpy::npy_load("./weights/conv-weights.npy"));
-        auto torch_output = Tensor(cnpy::npy_load("./tensors/pool-torch.npy"));
+        auto conv_weights = Tensor("./weights/conv-weights.npy");
+        auto torch_output = Tensor("./tensors/pool-torch.npy");
 
-        auto x = Tensor(TensorShape{8,2,34,34});
+        auto data = Tensor("./tensors/sample-data.npy");
         auto x = Tensor(TensorShape{2,34,34});
         x.fill(1.0);
 

@@ -7,6 +7,16 @@ Tensor::Tensor()
           data_()
 {}
 
+Tensor::Tensor(const std::string path)
+{
+        auto npy = cnpy::npy_load(path);
+        const float* elements = npy.data<float>();
+
+        shape_ = npy.shape;
+        auto size = getSize(shape_);
+        data_ = std::vector<float>(elements, elements + size );
+}
+
 Tensor::Tensor(const TensorShape dims)
         : shape_(dims)
 {

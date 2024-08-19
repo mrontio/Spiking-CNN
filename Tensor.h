@@ -27,6 +27,7 @@ private:
 public:
         Tensor();
         Tensor(const TensorShape dims);
+        Tensor(const std::string);
         Tensor(const cnpy::NpyArray &npy);
         Tensor(const Tensor& source);
 
