@@ -25,11 +25,11 @@ Tensor* Convolutional::forward(const Tensor& input)
         // 0 is for channels_out, we keep as 0 for now
         fill_padding_buffer(input, channels_in_);
 
-        auto output = new Tensor(TensorShape{channels_out_, input_shape[2], input_shape[3]});
+        auto output = new Tensor(TensorShape{channels_out_, input_shape[1], input_shape[2]});
 
         for (shape l = 0; l < channels_out_; ++l) {
-                for (shape i  = 0; i < input_shape[2]; i += stride_) {
-                        for (shape j  = 0; j < input_shape[3]; j += stride_) {
+                for (shape i  = 0; i < input_shape_[1]; i += stride_) {
+                        for (shape j  = 0; j < input_shape_[2]; j += stride_) {
                                 auto output_idx = TensorShape{l,i,j};
                                 (*output)[output_idx] += apply_kernel(l, i, j);
                         }
