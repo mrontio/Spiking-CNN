@@ -6,6 +6,11 @@
 #include <algorithm>
 #include <cnpy.h>
 #include <string>
+#include <iostream>
+#include <numeric>
+#include <sstream>
+#include <cmath>
+#include <format>
 
 using shape = long unsigned int;
 using TensorShape = std::vector<shape>;

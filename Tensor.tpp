@@ -1,16 +1,6 @@
-#include <iostream>
-#include <vector>
-#include <numeric>
-#include <stdexcept>
-#include <sstream>
-#include <cnpy.h>
-#include <cmath>
-#include <format>
-
-using namespace std;
-
 #include "Tensor.h"
 
+using namespace std;
 
 Tensor::Tensor()
         : shape_(TensorShape()),
