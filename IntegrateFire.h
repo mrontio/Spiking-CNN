@@ -10,6 +10,7 @@ public:
 
 private:
         const float v_th_ = 1.0;
+        const float min_v_mem_ = -1.0;
         TensorShape input_shape_;
         Tensor membrane_;
 };

@@ -19,6 +19,10 @@ Tensor* IntegrateFire::forward(const Tensor& x) {
                                         membrane_[idx] -= v_th_;
                                 }
 
+                                if (membrane_[idx] < min_v_mem_) {
+                                        membrane_[idx] = min_v_mem_;
+                                }
+
                         }
 
                 }
