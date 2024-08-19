@@ -2,16 +2,17 @@
 #include <vector>
 
 #include "Tensor.h"
+#include "Linear.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-        Tensor t = Tensor(TensorShape{8, 3, 4, 4});
-        t.fillDebug();
+        auto linear = Linear(Tensor("./weights/9-Linear.npy"));
+        Tensor x = Tensor(TensorShape{256});
+        x.fill(1.0f);
 
-        auto t1 = t(TensorShape{7, 2, 3, 3});
-
+        auto out = linear.forward(x);
 
         return 0;
 }

@@ -9,6 +9,6 @@ ${OUTPUT_DIR}/main: main.cpp Tensor.tpp Tensor.h Convolutional.tpp Convolutional
 run: ${OUTPUT_DIR}/main
 	${OUTPUT_DIR}/main
 
-test:
-	g++ ${LIBS} ${FLAGS} -o ${OUTPUT_DIR}/test test.cpp Tensor.h
+test: Tensor.h  Linear.h
+	g++ ${LIBS} ${FLAGS} -o ${OUTPUT_DIR}/test test.cpp Tensor.h Linear.h
 	${OUTPUT_DIR}/test
