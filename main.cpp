@@ -14,6 +14,7 @@ int main() {
         auto torch_output = Tensor(cnpy::npy_load("./tensors/pool-torch.npy"));
 
         auto x = Tensor(TensorShape{8,2,34,34});
+        auto x = Tensor(TensorShape{2,34,34});
         x.fill(1.0);
 
         auto conv2d = Convolutional(conv_weights, 1, {1, 1});

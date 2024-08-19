@@ -7,12 +7,12 @@ Convolutional::Convolutional(Tensor weights, shape stride, vector<shape> padding
         padding_(padding),
         channels_in_(weights.shape(1)),
         channels_out_(weights.shape(0)),
-        input_shape_(34, 34)
+        input_shape_({2, 34, 34})
 {
         weights_ = Tensor(weights);
         TensorShape padding_shape = TensorShape{weights_.shape(1),
-                                                input_shape_[0] + 2*padding_[0],
-                                                input_shape_[1] + 2*padding_[1]};
+                                                input_shape_[1] + 2*padding_[0],
+                                                input_shape_[2] + 2*padding_[1]};
         padding_buffer_ = Tensor(padding_shape);
         padding_buffer_.fill(0.0f);
 
@@ -61,11 +61,11 @@ inline float Convolutional::apply_kernel(shape l, shape i, shape j) {
 
 void Convolutional::fill_padding_buffer(const Tensor& input, shape c_in) {
         for (shape c = 0; c < c_in; ++c) {
-                for (shape i = 0; i < input_shape_[2]; i++) {
+                for (shape i = 0; i < input_shape_[1]; i++) {
                         shape i_pad = i + padding_[0];
-                        for (shape j = 0; j < input_shape_[3]; j++) {
+                        for (shape j = 0; j < input_shape_[2]; j++) {
                                 shape  j_pad = j + padding_[1];
-                                auto input_idx = TensorShape{0, c, i, j};
+                                auto input_idx = TensorShape{c, i, j};
                                 auto pad_idx = TensorShape{c,i_pad,j_pad};
                                 padding_buffer_[pad_idx] = input[input_idx];
                         }

@@ -14,10 +14,10 @@ public:
 private:
         shape kernel_size_;
         shape stride_;
-        vector<shape> padding_;
+        TensorShape padding_;
         shape channels_in_;
         shape channels_out_;
-        vector<shape> input_shape_;
+        TensorShape input_shape_;
         Tensor weights_;
         Tensor padding_buffer_;
 
