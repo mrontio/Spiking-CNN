@@ -6,11 +6,11 @@
 
 class AvgPool {
 public:
-        AvgPool(shape kernel, shape stride, shape padding);
+        AvgPool(TensorShape input_shape, shape kernel, shape stride, shape padding);
         Tensor* forward(Tensor& x);
 
 private:
-        const TensorShape input_shape_ = {8, 34, 34};
+        TensorShape input_shape_;
         shape kernel_;
         shape stride_;
         shape padding_;

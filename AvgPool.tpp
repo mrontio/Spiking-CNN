@@ -1,9 +1,10 @@
 #include "AvgPool.h"
 
-AvgPool::AvgPool(shape kernel, shape stride, shape padding) :
+AvgPool::AvgPool(TensorShape input_shape, shape kernel, shape stride, shape padding) :
         kernel_(kernel),
         stride_(stride),
-        padding_(padding)
+        padding_(padding),
+        input_shape_(input_shape)
 {
         h_out_ = shape(floor((input_shape_[1] + 2*padding - kernel) / stride + 1));
         w_out_ = shape(floor((input_shape_[2] + 2*padding - kernel) / stride + 1));
