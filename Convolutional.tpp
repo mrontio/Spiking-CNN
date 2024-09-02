@@ -2,17 +2,18 @@
 
 using namespace std;
 
-Convolutional::Convolutional(Tensor weights, shape stride, vector<shape> padding) :
+Convolutional::Convolutional(TensorShape input_shape, Tensor weights, shape stride, vector<shape> padding) :
         stride_(stride),
         padding_(padding),
         channels_in_(weights.shape(1)),
         channels_out_(weights.shape(0)),
-        input_shape_({2, 34, 34}),
+        input_shape_(input_shape),
         weights_(Tensor(weights)),
         padding_buffer_(TensorShape{weights_.shape(1),
                                     input_shape_[1] + 2*padding_[0],
                                     input_shape_[2] + 2*padding_[1]})
 {
+
         padding_buffer_.fill(0.0f);
 }
 
