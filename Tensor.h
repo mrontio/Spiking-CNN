@@ -18,7 +18,7 @@ using TensorShape = std::vector<shape>;
 class Tensor {
 private:
         TensorShape shape_;
-        std::vector<float> data_;
+        std::vector<float>* data_;
 
 
         size_t getIndex(TensorShape dims) const;

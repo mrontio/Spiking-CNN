@@ -13,7 +13,7 @@ Tensor::Tensor(const std::string path)
         const float* elements = npy.data<float>();
 
         shape_ = npy.shape;
-        data_ = std::vector<float>(elements, elements + getSize(shape_));
+        data_ = new std::vector<float>(elements, elements + getSize(shape_));
 }
 
 Tensor::Tensor(const TensorShape dims)
@@ -23,7 +23,7 @@ Tensor::Tensor(const TensorShape dims)
         for (int n = 0; n < shape_.size(); n++) {
                 size *= dims[n];
         }
-        data_ = std::vector<float>(size);
+        data_ = new std::vector<float>(size);
 }
 
 
@@ -31,20 +31,20 @@ Tensor::Tensor(const cnpy::NpyArray& npy)
         : shape_(npy.shape)
 {
         const float* elements = npy.data<float>();
-        data_ = std::vector<float>(elements, elements + getSize(shape_));
+        data_ = new std::vector<float>(elements, elements + getSize(shape_));
 }
 
 Tensor::Tensor(const Tensor& source)
         : shape_(source.shape())
 {
         const float* data = source.data();
-        data_= std::vector<float>(data, data + getSize(shape_));
+        data_= new std::vector<float>(data, data + getSize(shape_));
 }
 
 Tensor::Tensor(const float* source, const TensorShape shape)
         : shape_(shape)
 {
-        data_ = std::vector<float>(source, source + getSize(shape));
+        data_ = new std::vector<float>(source, source + getSize(shape));
 }
 
 Tensor& Tensor::reshape(const TensorShape shape)
@@ -79,7 +79,7 @@ float& Tensor::operator[](TensorShape dims)
                 throw std::out_of_range("Tensor index out of range");
         }
 
-        return data_[this->getIndex(dims)];
+        return (*data_)[this->getIndex(dims)];
 }
 
 const float Tensor::operator[](TensorShape dims) const
@@ -88,7 +88,7 @@ const float Tensor::operator[](TensorShape dims) const
                 throw std::out_of_range("Tensor index out of range");
         }
 
-        return data_[this->getIndex(dims)];
+        return (*data_)[this->getIndex(dims)];
 }
 
 /**
@@ -113,7 +113,7 @@ Tensor* Tensor::operator()(TensorShape shape) {
         }
         if (dim_diff == 0) new_shape = TensorShape{1};
 
-        float* beginp = data_.data() + getIndex(begin);
+        float* beginp = data_->data() + getIndex(begin);
         auto output = new Tensor(beginp, new_shape);
 
         return output;
@@ -122,20 +122,20 @@ Tensor* Tensor::operator()(TensorShape shape) {
 
 const bool Tensor::operator==(const Tensor& other) const
 {
-        return this->data_ == other.vector();
+        return *this->data_ == other.vector();
 }
 
 const bool Tensor::precisionEqual(const Tensor& other, const int precision) const
 {
-        if (data_.size() != other.size()) {
-                cout << "precisionEqual: size mismatch " << data_.size() << ", " << other.size() << endl;
+        if (data_->size() != other.size()) {
+                cout << "precisionEqual: size mismatch " << data_->size() << ", " << other.size() << endl;
                 return false;
         }
-        auto ours = data_;
+        auto ours = *data_;
         auto theirs = other.vector();
         float p = float(pow(10, -precision));
         bool correct = true;
-        for (int i = 0; i < data_.size(); i++) {
+        for (int i = 0; i < data_->size(); i++) {
                 bool correct = std::fabs(ours[i] - theirs[i]) < p;
                 if (!correct) {
                         return false;
@@ -153,7 +153,7 @@ const long unsigned int Tensor::shape(int idx) const {
 }
 
 const size_t Tensor::size() const {
-        return data_.size();
+        return data_->size();
 }
 
 const size_t Tensor::getSize(const TensorShape shape) const
@@ -166,15 +166,15 @@ const size_t Tensor::getSize(const TensorShape shape) const
 }
 
 float const * Tensor::data() const {
-        return data_.data();
+        return data_->data();
 }
 
 const std::vector<float>& Tensor::vector() const {
-        return data_;
+        return *data_;
 }
 
 void Tensor::fill(const float& value) {
-    std::fill(data_.begin(), data_.end(), value);
+    std::fill(data_->begin(), data_->end(), value);
 }
 
 std::string Tensor::shapeString() const {
@@ -189,7 +189,7 @@ std::string Tensor::shapeString() const {
 
 void Tensor::fillDebug()
 {
-        for (int i = 0; i < data_.size(); i++) {
-                data_[i] = i;
+        for (int i = 0; i < data_->size(); i++) {
+                (*data_)[i] = i;
         }
 }
