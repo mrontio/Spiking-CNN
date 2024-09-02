@@ -7,7 +7,7 @@
 class AvgPool {
 public:
         AvgPool(TensorShape input_shape, shape kernel, shape stride, shape padding);
-        Tensor* forward(Tensor& x);
+        std::unique_ptr<Tensor> forward(Tensor& x);
 
 private:
         TensorShape input_shape_;

@@ -5,8 +5,8 @@
 
 class IntegrateFire {
 public:
-        IntegrateFire(const TensorShape input_shape);
-        Tensor* forward(const Tensor& input);
+        IntegrateFire(const TensorShape& input_shape);
+        std::unique_ptr<Tensor> forward(const Tensor& input);
 
 private:
         const float v_th_ = 1.0;

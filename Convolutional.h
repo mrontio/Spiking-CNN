@@ -8,8 +8,8 @@
 
 class Convolutional {
 public:
-        Convolutional(Tensor weights, shape stride, vector<shape> padding);
-        Tensor* forward(const Tensor& input);
+        Convolutional(TensorShape input_shape, Tensor weights, shape stride, vector<shape> padding);
+        std::unique_ptr<Tensor> forward(const Tensor& input);
 
 private:
         shape kernel_size_;

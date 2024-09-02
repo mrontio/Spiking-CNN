@@ -9,5 +9,6 @@ stdenv.mkDerivation {
     cnpy
     zlib
     gdb
+    valgrind
   ];
 }

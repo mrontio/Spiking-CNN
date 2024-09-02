@@ -35,7 +35,7 @@ public:
         float& operator[](const TensorShape& dims);
         const float operator[](const TensorShape& dims) const;
 
-        Tensor* operator()(const TensorShape& shape);
+        std::unique_ptr<Tensor> operator()(const TensorShape& shape);
 
         const TensorShape shape() const ;
         const long unsigned int shape(int idx) const;

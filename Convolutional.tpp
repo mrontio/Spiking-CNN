@@ -17,14 +17,14 @@ Convolutional::Convolutional(TensorShape input_shape, Tensor weights, shape stri
         padding_buffer_.fill(0.0f);
 }
 
-Tensor* Convolutional::forward(const Tensor& input)
+std::unique_ptr<Tensor> Convolutional::forward(const Tensor& input)
 {
         auto input_shape = input.shape();
         // Fills padding_buffer_ with 0s and input
         // 0 is for channels_out, we keep as 0 for now
         fill_padding_buffer(input, channels_in_);
 
-        auto output = new Tensor(TensorShape{channels_out_, input_shape[1], input_shape[2]});
+        auto output = std::make_unique<Tensor>(TensorShape{channels_out_, input_shape[1], input_shape[2]});
 
         for (shape l = 0; l < channels_out_; ++l) {
                 for (shape i  = 0; i < input_shape_[1]; i += stride_) {

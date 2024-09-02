@@ -58,7 +58,8 @@ Tensor& Tensor::reshape(const TensorShape& shape)
 }
 
 Tensor& Tensor::flatten() {
-        shape_ = TensorShape{getSize(shape_)};
+        auto size = getSize(shape_);
+        shape_.assign({getSize(shape_)});
         return *this;
 }
 
@@ -96,7 +97,7 @@ const float Tensor::operator[](const TensorShape& dims) const
    This returns a a pointer to a sub-tensor.
    @shape dimensions must be less than that of the parent tensor.
  */
-Tensor* Tensor::operator()(const TensorShape& shape) {
+std::unique_ptr<Tensor> Tensor::operator()(const TensorShape& shape) {
         auto dim_n = shape.size();
         auto dim_diff =  shape_.size() - dim_n;
         if (dim_diff < 0) {
@@ -114,7 +115,7 @@ Tensor* Tensor::operator()(const TensorShape& shape) {
         if (dim_diff == 0) new_shape = TensorShape{1};
 
         float* beginp = data_->data() + getIndex(begin);
-        auto output = new Tensor(beginp, new_shape);
+        auto output = make_unique<Tensor>(beginp, new_shape);
 
         return output;
 

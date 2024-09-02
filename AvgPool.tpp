@@ -16,10 +16,10 @@ AvgPool::AvgPool(TensorShape input_shape, shape kernel, shape stride, shape padd
 }
 
 
-Tensor* AvgPool::forward(Tensor& input)
+std::unique_ptr<Tensor> AvgPool::forward(Tensor& input)
 {
         fill_padding_buffer(input, input_shape_[0]);
-        auto output = new Tensor(TensorShape{input_shape_[0], h_out_, w_out_});
+        auto output = std::make_unique<Tensor>(TensorShape{input_shape_[0], h_out_, w_out_});
 
         for (shape c = 0; c < input_shape_[0]; ++c) {
                 for (shape i = 0; i < h_out_; ++i) {

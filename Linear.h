@@ -6,7 +6,7 @@
 class Linear {
 public:
         Linear(Tensor weights);
-        Tensor* forward(const Tensor& input);
+        std::unique_ptr<Tensor> forward(const Tensor& input);
 
 private:
         Tensor weights_;
