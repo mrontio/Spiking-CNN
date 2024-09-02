@@ -13,17 +13,17 @@ Tensor::Tensor(const std::string path)
         const float* elements = npy.data<float>();
 
         shape_ = npy.shape;
-        data_ = new std::vector<float>(elements, elements + getSize(shape_));
+        data_ = make_unique<std::vector<float>>(elements, elements + getSize(shape_));
 }
 
-Tensor::Tensor(const TensorShape dims)
+Tensor::Tensor(const TensorShape& dims)
         : shape_(dims)
 {
         int size = 1;
         for (int n = 0; n < shape_.size(); n++) {
                 size *= dims[n];
         }
-        data_ = new std::vector<float>(size);
+        data_ = make_unique<std::vector<float>>(size);
 }
 
 
@@ -31,23 +31,23 @@ Tensor::Tensor(const cnpy::NpyArray& npy)
         : shape_(npy.shape)
 {
         const float* elements = npy.data<float>();
-        data_ = new std::vector<float>(elements, elements + getSize(shape_));
+        data_ = make_unique<std::vector<float>>(elements, elements + getSize(shape_));
 }
 
 Tensor::Tensor(const Tensor& source)
         : shape_(source.shape())
 {
         const float* data = source.data();
-        data_= new std::vector<float>(data, data + getSize(shape_));
+        data_= make_unique<std::vector<float>>(data, data + getSize(shape_));
 }
 
-Tensor::Tensor(const float* source, const TensorShape shape)
+Tensor::Tensor(const float* source, const TensorShape& shape)
         : shape_(shape)
 {
-        data_ = new std::vector<float>(source, source + getSize(shape));
+        data_ = make_unique<std::vector<float>>(source, source + getSize(shape));
 }
 
-Tensor& Tensor::reshape(const TensorShape shape)
+Tensor& Tensor::reshape(const TensorShape& shape)
 {
         auto size = getSize(shape);
         if (size != this->size()) {
@@ -62,7 +62,7 @@ Tensor& Tensor::flatten() {
         return *this;
 }
 
-size_t Tensor::getIndex(TensorShape dims) const
+size_t Tensor::getIndex(const TensorShape& dims) const
 {
         int v_index = dims[0];
         for (int i = 1; i < shape_.size(); ++i) {
@@ -73,7 +73,7 @@ size_t Tensor::getIndex(TensorShape dims) const
 
 
 
-float& Tensor::operator[](TensorShape dims)
+float& Tensor::operator[](const TensorShape& dims)
 {
         if (dims.size() != shape_.size()) {
                 throw std::out_of_range("Tensor index out of range");
@@ -82,7 +82,7 @@ float& Tensor::operator[](TensorShape dims)
         return (*data_)[this->getIndex(dims)];
 }
 
-const float Tensor::operator[](TensorShape dims) const
+const float Tensor::operator[](const TensorShape& dims) const
 {
         if (dims.size() != shape_.size()) {
                 throw std::out_of_range("Tensor index out of range");
@@ -96,7 +96,7 @@ const float Tensor::operator[](TensorShape dims) const
    This returns a a pointer to a sub-tensor.
    @shape dimensions must be less than that of the parent tensor.
  */
-Tensor* Tensor::operator()(TensorShape shape) {
+Tensor* Tensor::operator()(const TensorShape& shape) {
         auto dim_n = shape.size();
         auto dim_diff =  shape_.size() - dim_n;
         if (dim_diff < 0) {
@@ -156,7 +156,7 @@ const size_t Tensor::size() const {
         return data_->size();
 }
 
-const size_t Tensor::getSize(const TensorShape shape) const
+const size_t Tensor::getSize(const TensorShape& shape) const
 {
         int size = 1;
         for (int i = 0; i < shape.size(); ++i) {

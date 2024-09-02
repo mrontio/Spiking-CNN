@@ -7,15 +7,13 @@ Convolutional::Convolutional(Tensor weights, shape stride, vector<shape> padding
         padding_(padding),
         channels_in_(weights.shape(1)),
         channels_out_(weights.shape(0)),
-        input_shape_({2, 34, 34})
+        input_shape_({2, 34, 34}),
+        weights_(Tensor(weights)),
+        padding_buffer_(TensorShape{weights_.shape(1),
+                                    input_shape_[1] + 2*padding_[0],
+                                    input_shape_[2] + 2*padding_[1]})
 {
-        weights_ = Tensor(weights);
-        TensorShape padding_shape = TensorShape{weights_.shape(1),
-                                                input_shape_[1] + 2*padding_[0],
-                                                input_shape_[2] + 2*padding_[1]};
-        padding_buffer_ = Tensor(padding_shape);
         padding_buffer_.fill(0.0f);
-
 }
 
 Tensor* Convolutional::forward(const Tensor& input)

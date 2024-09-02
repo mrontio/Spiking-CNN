@@ -1,10 +1,9 @@
 #include "IntegrateFire.h"
 
 IntegrateFire::IntegrateFire(const TensorShape input_shape) :
-        input_shape_(input_shape)
-{
-        membrane_ = Tensor(input_shape);
-}
+        input_shape_(input_shape),
+        membrane_(Tensor(input_shape))
+{}
 
 Tensor* IntegrateFire::forward(const Tensor& x) {
         auto output = new Tensor(input_shape_);

@@ -18,30 +18,30 @@ using TensorShape = std::vector<shape>;
 class Tensor {
 private:
         TensorShape shape_;
-        std::vector<float>* data_;
+        std::unique_ptr<std::vector<float>> data_;
 
 
-        size_t getIndex(TensorShape dims) const;
-        const size_t getSize(const TensorShape shape) const;
+        size_t getIndex(const TensorShape& dims) const;
+        const size_t getSize(const TensorShape& shape) const;
 
 public:
         Tensor();
-        Tensor(const TensorShape dims);
+        Tensor(const TensorShape& dims);
         Tensor(const std::string);
         Tensor(const cnpy::NpyArray &npy);
         Tensor(const Tensor& source);
-        Tensor(const float* source, const TensorShape shape);
+        Tensor(const float* source, const TensorShape& shape);
 
-        float& operator[](TensorShape dims);
-        const float operator[](TensorShape dims) const;
+        float& operator[](const TensorShape& dims);
+        const float operator[](const TensorShape& dims) const;
 
-        Tensor* operator()(TensorShape shape);
+        Tensor* operator()(const TensorShape& shape);
 
         const TensorShape shape() const ;
         const long unsigned int shape(int idx) const;
         const size_t size() const;
 
-        Tensor& reshape(const TensorShape shape);
+        Tensor& reshape(const TensorShape& shape);
         Tensor& flatten();
 
         std::string shapeString () const;

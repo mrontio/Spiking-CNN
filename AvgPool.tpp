@@ -4,15 +4,14 @@ AvgPool::AvgPool(TensorShape input_shape, shape kernel, shape stride, shape padd
         kernel_(kernel),
         stride_(stride),
         padding_(padding),
-        input_shape_(input_shape)
+        input_shape_(input_shape),
+        padding_buffer_(TensorShape{input_shape_[0],
+                                    input_shape_[1] + 2*padding_,
+                                    input_shape_[2] + 2*padding_})
 {
         h_out_ = shape(floor((input_shape_[1] + 2*padding - kernel) / stride + 1));
         w_out_ = shape(floor((input_shape_[2] + 2*padding - kernel) / stride + 1));
 
-        TensorShape padding_shape = TensorShape{input_shape_[0],
-                                                input_shape_[1] + 2*padding_,
-                                                input_shape_[2] + 2*padding_};
-        padding_buffer_ = Tensor(padding_shape);
         padding_buffer_.fill(0.0f);
 }
 
