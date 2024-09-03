@@ -1,7 +1,13 @@
 OUTPUT_DIR = ./bin
 LIBS = -lcnpy
 DEBUG_FLAGS = -g -O0 -D DEBUG
-FLAGS = ${DEBUG_FLAGS}
+RUN_FLAGS = -O2
+
+ifdef $DEBUG
+	FLAGS = ${DEBUG_FLAGS}
+else
+	FLAGS = ${RUN_FLAGS}
+endif
 
 ${OUTPUT_DIR}/main: main.cpp Tensor.tpp Tensor.h Convolutional.tpp Convolutional.h AvgPool.h AvgPool.tpp Linear.h Linear.tpp
 	g++ ${LIBS} ${FLAGS} -o ${OUTPUT_DIR}/main main.cpp
