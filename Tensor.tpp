@@ -161,7 +161,7 @@ std::unique_ptr<Tensor> Tensor::sum() const {
 
 // Assume shape = {10}
 int Tensor::argmax() const {
-        float max = std::numeric_limits<float>::min();;
+        float max = - std::numeric_limits<float>::max();
         int argmax = -1;
         for (long unsigned int i = 0; i < shape_[0]; ++i) {
                 auto data = (*data_)[i];
