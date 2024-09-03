@@ -11,6 +11,7 @@
 #include <sstream>
 #include <cmath>
 #include <format>
+#include <limits>
 
 using shape = long unsigned int;
 using TensorShape = std::vector<shape>;
@@ -49,6 +50,10 @@ public:
 
         const bool operator==(const Tensor& other) const;
         const bool precisionEqual(const Tensor& other, const int precision) const;
+
+        // For the following, we assume that shape = {100, 10}
+        std::unique_ptr<Tensor> sum() const;
+        int argmax() const;
 
         const float* data() const;
         const std::vector<float>& vector() const;

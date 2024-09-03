@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() {
-        auto data = make_unique<Tensor>("./tensors/sample-data.npy");
+        auto data = make_unique<Tensor>("/home/mrontio/data/nmnist-converted/0/0.npy");
 
         auto input_shape = TensorShape{2, 34, 34};
 
@@ -29,12 +29,12 @@ int main() {
         // Step 8 missing: we flatten the tensor in-place.
         auto l9 = Linear(Tensor("./weights/9-Linear.npy"));
         // Not yet, my IF currently expects a dimensionality of 3
-        // auto i10 = IntegrateFire(TensorShape{10});
+                // auto i10 = IntegrateFire(TensorShape{10});
 
         int correct = 0;
-        for (shape batch = 0; batch < 1/*data.shape(0)*/; batch++) {
-                auto x = (*data)(TensorShape{batch});
+        for (shape batch = 0; batch < data->shape(0); batch++) {
 
+                auto x = (*data)(TensorShape{batch});
                 x = c0.forward(*x);
                 x = i1.forward(*x);
                 x = a2.forward(*x);
@@ -46,7 +46,11 @@ int main() {
                 x->flatten();
                 x = l9.forward(*x);
                 // i10 once you've implemented dynamic dimensions
-        }
 
+                auto pred = x->argmax();
+                correct += pred == 0;
+                cout << pred << endl;
+        }
+        cout << correct << endl;
         return 0;
 }

@@ -145,6 +145,36 @@ const bool Tensor::precisionEqual(const Tensor& other, const int precision) cons
         return true;
 }
 
+// Assume shape = {100, 10}
+std::unique_ptr<Tensor> Tensor::sum() const {
+        int axes = shape_[0];
+        auto out = make_unique<Tensor>(TensorShape{shape_[1]});
+        out->fill(0.0f);
+        for (long unsigned int i = 0; i < shape_[1]; ++i) {
+                for (long unsigned int j = 0; j < axes; ++j) {
+                        auto idx = TensorShape{j, i};
+                        (*out)[TensorShape{i}] += (*this)[idx];
+                }
+        }
+        return out;
+}
+
+// Assume shape = {10}
+int Tensor::argmax() const {
+        float max = std::numeric_limits<float>::min();;
+        int argmax = -1;
+        for (long unsigned int i = 0; i < shape_[0]; ++i) {
+                auto data = (*data_)[i];
+                cout << data;
+                if (data > max) {
+                        max = data;
+                        argmax = i;
+                }
+        }
+        cout << ":";
+        return argmax;
+}
+
 const TensorShape Tensor::shape() const {
         return shape_;
 }
