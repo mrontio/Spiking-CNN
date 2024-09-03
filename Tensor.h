@@ -58,6 +58,7 @@ public:
         const float* data() const;
         const std::vector<float>& vector() const;
 
+        void save(std::string filename) const;
         void fillDebug();
 
 

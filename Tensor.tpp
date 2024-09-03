@@ -224,3 +224,7 @@ void Tensor::fillDebug()
                 (*data_)[i] = i;
         }
 }
+
+void Tensor::save(string filepath) const {
+        cnpy::npy_save(filepath, data_->data(), shape_, "w");
+}

@@ -9,7 +9,8 @@
 using namespace std;
 
 int main() {
-        auto data = make_unique<Tensor>("/home/mrontio/data/nmnist-converted/0/0.npy");
+        string filename = "0.npy";
+        auto data = make_unique<Tensor>("/home/mrontio/data/nmnist-converted/0/" + filename);
 
         auto input_shape = TensorShape{2, 34, 34};
 
@@ -32,7 +33,7 @@ int main() {
                 // auto i10 = IntegrateFire(TensorShape{10});
 
         int correct = 0;
-        for (shape batch = 0; batch < data->shape(0); batch++) {
+        for (shape batch = 0; batch < 1 /*data->shape(0)*/; batch++) {
 
                 auto x = (*data)(TensorShape{batch});
                 x = c0.forward(*x);
@@ -47,6 +48,7 @@ int main() {
                 x = l9.forward(*x);
                 // i10 once you've implemented dynamic dimensions
 
+                x->save("./tensors/" + filename);
                 auto pred = x->argmax();
                 correct += pred == 0;
                 cout << pred << endl;
