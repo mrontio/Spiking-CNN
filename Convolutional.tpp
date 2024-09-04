@@ -11,7 +11,8 @@ Convolutional::Convolutional(TensorShape input_shape, Tensor weights, shape stri
         weights_(Tensor(weights)),
         padding_buffer_(TensorShape{weights_.shape(1),
                                     input_shape_[1] + 2*padding_[0],
-                                    input_shape_[2] + 2*padding_[1]})
+                                    input_shape_[2] + 2*padding_[1]}),
+        kernel_size_(TensorShape{weights.shape(2), weights.shape(3)})
 {
 
         padding_buffer_.fill(0.0f);
@@ -24,11 +25,14 @@ std::unique_ptr<Tensor> Convolutional::forward(const Tensor& input)
         // 0 is for channels_out, we keep as 0 for now
         fill_padding_buffer(input, channels_in_);
 
-        auto output = std::make_unique<Tensor>(TensorShape{channels_out_, input_shape[1], input_shape[2]});
+        shape output_w = shape((input_shape[1] - kernel_size_[0] + 2 * padding_[0]) / stride_) + 1;
+        shape output_h = shape((input_shape[2] - kernel_size_[1] + 2 * padding_[1]) / stride_) + 1;
+
+        auto output = std::make_unique<Tensor>(TensorShape{channels_out_, output_w, output_h});
 
         for (shape l = 0; l < channels_out_; ++l) {
-                for (shape i  = 0; i < input_shape_[1]; i += stride_) {
-                        for (shape j  = 0; j < input_shape_[2]; j += stride_) {
+                for (shape i  = 0; i < output_h; i += stride_) {
+                        for (shape j  = 0; j < output_w; j += stride_) {
                                 auto output_idx = TensorShape{l,i,j};
                                 (*output)[output_idx] += apply_kernel(l, i, j);
                         }

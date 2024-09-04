@@ -12,7 +12,7 @@ public:
         std::unique_ptr<Tensor> forward(const Tensor& input);
 
 private:
-        shape kernel_size_;
+        TensorShape kernel_size_;
         shape stride_;
         TensorShape padding_;
         shape channels_in_;
@@ -20,6 +20,7 @@ private:
         TensorShape input_shape_;
         Tensor weights_;
         Tensor padding_buffer_;
+
 
         void fill_padding_buffer(const Tensor& input, shape c_in);
 
