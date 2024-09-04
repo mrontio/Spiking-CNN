@@ -187,7 +187,7 @@ const size_t Tensor::size() const {
         return data_->size();
 }
 
-const size_t Tensor::getSize(const TensorShape& shape) const
+size_t Tensor::getSize(const TensorShape& shape)
 {
         int size = 1;
         for (int i = 0; i < shape.size(); ++i) {

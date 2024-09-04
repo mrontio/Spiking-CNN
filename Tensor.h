@@ -23,7 +23,7 @@ private:
 
 
         size_t getIndex(const TensorShape& dims) const;
-        const size_t getSize(const TensorShape& shape) const;
+
 
 public:
         Tensor();
@@ -32,6 +32,8 @@ public:
         Tensor(const cnpy::NpyArray &npy);
         Tensor(const Tensor& source);
         Tensor(const float* source, const TensorShape& shape);
+
+        static size_t getSize(const TensorShape& shape);
 
         float& operator[](const TensorShape& dims);
         const float operator[](const TensorShape& dims) const;
