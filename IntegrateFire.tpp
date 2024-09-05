@@ -4,7 +4,7 @@
 IntegrateFire::IntegrateFire(const TensorShape& input_shape) :
         input_shape_(input_shape),
         size_(Tensor::getSize(input_shape)),
-        membrane_(TensorShape{size_})
+        membrane_(TensorShape{Tensor::getSize(input_shape)})
 
 {}
 
