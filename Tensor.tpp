@@ -234,8 +234,8 @@ void Tensor::save(string filepath) const {
 TensorShape Tensor::shave(const TensorShape& shape, const int n)
 {
         auto out = TensorShape{};
-        for (int i = n; n < shape.size(); ++i) {
-                out.emplace_back(shape[i]);
+        for (int i = n; i < shape.size(); ++i) {
+                out.push_back(shape[i]);
         }
         return out;
 }

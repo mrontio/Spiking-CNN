@@ -17,19 +17,18 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-        auto s = TensorShape{100, 2, 34, 34};
+        auto s = TensorShape{100, 8, 34, 34};
         auto data = make_unique<Tensor>(s);
         data->fill(0.2f);
 
-        auto c0 = Convolutional(s, Tensor("./weights/0-Conv2d.npy"), 1, {1, 1});
+        auto c0 = Convolutional(data->shape(), Tensor("./weights/0-Conv2d.npy"), 1, {1, 1});
+        auto i1 = IntegrateFire(s);
+
         auto x = c0.forward(*data);
+        x = i1.forward(*x);
+        cout << x->shapeString() << endl;
         x->save("./lol.npy");
-        // DEBUG_WRITE_CMD;
-        // auto d = *x;
-        // for (int i = 0; i < 5; ++i) {
-        //         x = i1.forward(d);
-        //         DEBUG_WRITE_CMD;
-        // }
+
 
         return 0;
 }
