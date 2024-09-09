@@ -15,6 +15,7 @@ private:
         TensorShape kernel_size_;
         shape stride_;
         TensorShape padding_;
+        shape timesteps_;
         shape channels_in_;
         shape channels_out_;
         TensorShape input_shape_;
@@ -22,7 +23,7 @@ private:
         Tensor padding_buffer_;
 
 
-        void fill_padding_buffer(const Tensor& input, shape c_in);
+        void fill_padding_buffer(const Tensor& input);
 
         float apply_kernel(shape l, shape i, shape j);
 };
