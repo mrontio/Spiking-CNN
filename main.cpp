@@ -1,13 +1,17 @@
 #include <iostream>
 #include <format>
 
-#define DEBUG_WRITE
+//#define DEBUG_WRITE
 
 #include "Tensor.h"
 #include "Convolutional.h"
 #include "IntegrateFire.h"
 #include "AvgPool.h"
 #include "Linear.h"
+#include <filesystem>
+
+
+
 
 using namespace std;
 
@@ -19,19 +23,26 @@ using namespace std;
 #define DEBUG_WRITE_MEMBRANE_CMD x->save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
 #else
 #define DEBUG_WRITE_X_CMD
-#define DEBUG_WRITE_MEMBRANE_CMD
+#define DEBUG_WRITE_MEMBRANE_FILE
 #endif
 
 int main() {
-        //string filename = "0.npy";
-        //int real = 0;
-        //auto data = make_unique<Tensor>("/home/mrontio/data/nmnist-converted/" + to_string(real) + "/"  + filename);
-        shape total_count = 5;
-        auto data = make_unique<Tensor>(TensorShape{total_count, 2, 34, 34});
-        data->fill(0.2f);
+        int real = 6;
+        string filename = to_string(real) + "172.npy";
+        // auto data = make_unique<Tensor>("/home/mrontio/data/nmnist-converted/" + to_string(real) + "/"  + filename);
+        auto data = make_unique<Tensor>("./6174.npy");
+        //shape total_count = 5;
+        //auto data = make_unique<Tensor>(TensorShape{total_count, 2, 34, 34});
+        //data->fill(0.2f);
+        //data->fillDebug();
 
-        data->save("./tensors/datafile.npy");
-        printf("Wrote ./tensors/datafile.npy\n");
+#ifdef DEBUG_WRITE
+        filesystem::remove_all("./tensors/");
+        std::filesystem::create_directory("./tensors");
+
+#endif
+        //data->save("./tensors/" + filename);
+        //cout << "Wrote ./tensors/" << filename <<  endl;
 
         auto input_shape = TensorShape{2, 34, 34};
 
@@ -56,42 +67,42 @@ int main() {
         int datacount = 0;
         int count = 0;
         auto mem = i1.membrane_;
-        //for (shape batch = 0; batch < data->shape(0); batch++) {
-        for (shape batch = 0; batch < 5; batch++) {
-                auto x = (*data)(TensorShape{batch});
+
+        auto pred = Tensor(TensorShape(10));
+
+        for (shape t = 0; t < data->shape(0); t++) {
+                auto x = (*data)(TensorShape{t});
 
                 x = c0.forward(*x);
                 DEBUG_WRITE_X_CMD;
                 x = i1.forward(*x);
-                i1.membrane_.save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
+                // i1.membrane_.save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
                 DEBUG_WRITE_X_CMD;
                 x = a2.forward(*x);
                 DEBUG_WRITE_X_CMD;
                 x = c3.forward(*x);
                 DEBUG_WRITE_X_CMD;
                 x = i4.forward(*x);
-                i4.membrane_.save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
+                // i4.membrane_.save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
                 DEBUG_WRITE_X_CMD;
                 x = a5.forward(*x);
                 DEBUG_WRITE_X_CMD;
                 x = c6.forward(*x);
                 DEBUG_WRITE_X_CMD;
                 x = i7.forward(*x);
-                i7.membrane_.save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
+                // i7.membrane_.save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
                 DEBUG_WRITE_X_CMD;
                 x->flatten();
                 DEBUG_WRITE_X_CMD;
                 x = l9.forward(*x);
                 DEBUG_WRITE_X_CMD;
                 x = i10.forward(*x);
-                i10.membrane_.save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
+                // i10.membrane_.save(DEBUG_WRITE_MEMBRANE_FILE); printf("Wrote %s\n", DEBUG_WRITE_MEMBRANE_FILE);
                 DEBUG_WRITE_X_CMD;
 
-                printf("\nBatch %lu: end at %d\n", batch, count);
-                // auto pred = x->argmax();
-                // correct += pred == real;
-                // printf("[%lu] Predicted: %d\n", batch, pred);
+                cout << x->argmax() << endl;
+
         }
-        // printf("Correct: %d\n", correct);
+        //cout << pred.argmax() << endl;
         return 0;
 }
