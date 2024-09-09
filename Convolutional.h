@@ -9,7 +9,7 @@
 class Convolutional {
 public:
         Convolutional(TensorShape input_shape, Tensor weights, shape stride, vector<shape> padding);
-        std::unique_ptr<Tensor> forward(const Tensor& input);
+        std::unique_ptr<Tensor> forward(Tensor& input);
 
 private:
         TensorShape kernel_size_;
@@ -23,7 +23,7 @@ private:
         Tensor padding_buffer_;
 
 
-        void fill_padding_buffer(const Tensor& input);
+        void fill_padding_buffer(const std::unique_ptr<Tensor> input);
 
         float apply_kernel(shape l, shape i, shape j);
 };

@@ -15,22 +15,18 @@ Convolutional::Convolutional(TensorShape input_shape, Tensor weights, shape stri
                                     input_shape_[2] + 2*padding_[1]}),
         kernel_size_(TensorShape{weights.shape(2), weights.shape(3)})
 {
-
         padding_buffer_.fill(0.0f);
 }
 
-std::unique_ptr<Tensor> Convolutional::forward(const Tensor& input)
+std::unique_ptr<Tensor> Convolutional::forward(Tensor& input)
 {
-        // Fills padding_buffer_ with 0s and input
-        // 0 is for channels_out, we keep as 0 for now
-        fill_padding_buffer(input);
-
         shape output_w = shape((input_shape_[1] - kernel_size_[0] + 2 * padding_[0]) / stride_) + 1;
         shape output_h = shape((input_shape_[2] - kernel_size_[1] + 2 * padding_[1]) / stride_) + 1;
 
         auto output = std::make_unique<Tensor>(TensorShape{timesteps_, channels_out_, output_w, output_h});
 
         for (shape t = 0; t < timesteps_; t++) {
+                fill_padding_buffer(input(TensorShape{t}));
                 for (shape l = 0; l < channels_out_; ++l) {
                         for (shape i  = 0; i < output_h; i += stride_) {
                                 for (shape j  = 0; j < output_w; j += stride_) {
@@ -64,17 +60,15 @@ inline float Convolutional::apply_kernel(shape l, shape i, shape j) {
         return output;
 }
 
-void Convolutional::fill_padding_buffer(const Tensor& input) {
-        for (shape t = 0; t < timesteps_; ++t){
-                for (shape c = 0; c < channels_in_; ++c) {
-                        for (shape i = 0; i < input_shape_[1]; i++) {
-                                shape i_pad = i + padding_[0];
-                                for (shape j = 0; j < input_shape_[2]; j++) {
-                                        shape  j_pad = j + padding_[1];
-                                        auto input_idx = TensorShape{t, c, i, j};
-                                        auto pad_idx = TensorShape{c,i_pad,j_pad};
-                                        padding_buffer_[pad_idx] = input[input_idx];
-                                }
+void Convolutional::fill_padding_buffer(const std::unique_ptr<Tensor> input) {
+        for (shape c = 0; c < channels_in_; ++c) {
+                for (shape i = 0; i < input_shape_[1]; i++) {
+                        shape i_pad = i + padding_[0];
+                        for (shape j = 0; j < input_shape_[2]; j++) {
+                                shape  j_pad = j + padding_[1];
+                                auto input_idx = TensorShape{c, i, j};
+                                auto pad_idx = TensorShape{c,i_pad,j_pad};
+                                padding_buffer_[pad_idx] = (*input)[input_idx];
                         }
                 }
         }
