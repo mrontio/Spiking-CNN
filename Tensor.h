@@ -34,6 +34,7 @@ public:
         Tensor(const float* source, const TensorShape& shape);
 
         static size_t getSize(const TensorShape& shape);
+        static TensorShape shave(const TensorShape& shape, const int n);
 
         float& operator[](const TensorShape& dims);
         const float operator[](const TensorShape& dims) const;

@@ -228,3 +228,14 @@ void Tensor::fillDebug()
 void Tensor::save(string filepath) const {
         cnpy::npy_save(filepath, data_->data(), shape_, "w");
 }
+
+
+// Shaves off first `n` elements of shape
+TensorShape Tensor::shave(const TensorShape& shape, const int n)
+{
+        auto out = TensorShape{};
+        for (int i = n; n < shape.size(); ++i) {
+                out.emplace_back(shape[i]);
+        }
+        return out;
+}
