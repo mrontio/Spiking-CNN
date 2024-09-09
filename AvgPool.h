@@ -16,10 +16,11 @@ private:
         shape padding_;
         shape h_out_;
         shape w_out_;
+        shape timesteps_;
         Tensor padding_buffer_;
 
-        void fill_padding_buffer(const Tensor& input, shape c_in);
-        float apply_kernel(const Tensor& input, shape c, shape i, shape j);
+        void fill_padding_buffer(const std::unique_ptr<Tensor> input);
+        float apply_kernel(shape c, shape i, shape j);
 
 };
 

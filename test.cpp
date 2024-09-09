@@ -5,6 +5,7 @@
 #include "Tensor.h"
 #include "Convolutional.h"
 #include "IntegrateFire.h"
+#include "AvgPool.h"
 
 using namespace std;
 
@@ -24,10 +25,11 @@ int main(int argc, char *argv[])
 
         auto c0 = Convolutional(data->shape(), Tensor("./weights/0-Conv2d.npy"), 1, {1, 1});
         auto i1 = IntegrateFire(s);
-        // auto a2 = AvgPool(s, 2, 2, 0);
+        auto a2 = AvgPool(s, 2, 2, 0);
 
         auto x = c0.forward(*data);
         x = i1.forward(*x);
+        x = a2.forward(*x);
 
         cout << x->shapeString() << endl;
         x->save("./lol.npy");
