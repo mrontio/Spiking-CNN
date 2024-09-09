@@ -15,7 +15,7 @@ std::unique_ptr<Tensor> IntegrateFire::forward(Tensor& x) {
                 auto idx = TensorShape{i};
                 membrane_[idx] += x[idx];
 
-                if (membrane_[idx] > v_th_) {
+                if (membrane_[idx] >= v_th_) {
                         (*output)[idx] = 1;
                         membrane_[idx] -= v_th_;
                 }
