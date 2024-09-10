@@ -6,10 +6,11 @@
 #include "Convolutional.h"
 #include "IntegrateFire.h"
 #include "AvgPool.h"
+#include "Linear.h"
 
 using namespace std;
 
-#define DEBUG_WRITE
+//#define DEBUG_WRITE
 #ifdef DEBUG_WRITE
 #define DEBUG_WRITE_CMD x->save("./tensors/layer" + to_string(count) + ".npy"); printf("Wrote ./tensors/layer/%d.npy\n", count++);
 #else
@@ -18,19 +19,13 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-        auto s = TensorShape{100, 8, 34, 34};
-        auto data = make_unique<Tensor>(TensorShape{100, 2, 34, 34});
+        auto s = TensorShape{};
+        auto data = make_unique<Tensor>(TensorShape{100, 256});
         data->fillDebug();
         data->save("./please.npy");
 
-        auto c0 = Convolutional(data->shape(), Tensor("./weights/0-Conv2d.npy"), 1, {1, 1});
-        auto i1 = IntegrateFire(s);
-        auto a2 = AvgPool(s, 2, 2, 0);
-
-        auto x = c0.forward(*data);
-        x = i1.forward(*x);
-        x = a2.forward(*x);
-
+        auto l = Linear(Tensor("./weights/9-Linear.npy"));
+        auto x = l.forward(*data);
         cout << x->shapeString() << endl;
         x->save("./lol.npy");
 
