@@ -28,10 +28,10 @@ std::unique_ptr<Tensor> Convolutional::forward(Tensor& input)
         for (shape t = 0; t < timesteps_; t++) {
                 fill_padding_buffer(input(TensorShape{t}));
                 for (shape l = 0; l < channels_out_; ++l) {
-                        for (shape i  = 0; i < output_h; i += stride_) {
-                                for (shape j  = 0; j < output_w; j += stride_) {
+                        for (shape i  = 0; i < output_h; ++i) {
+                                for (shape j  = 0; j < output_w; ++j) {
                                         auto output_idx = TensorShape{t,l,i,j};
-                                        (*output)[output_idx] += apply_kernel(l, i, j);
+                                        (*output)[output_idx] += apply_kernel(l, i * stride_, j * stride_);
                                 }
                         }
                 }
