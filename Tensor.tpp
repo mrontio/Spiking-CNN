@@ -63,6 +63,26 @@ Tensor& Tensor::flatten() {
         return *this;
 }
 
+Tensor& Tensor::flatten(int dim) {
+        if (dim > shape_.size() - 1) {
+                throw std::runtime_error("flatten dimension out of bounds!");
+        }
+        // Flatten said dimensions
+        int newshape = 1;
+        for (int i = dim; i < shape_.size(); i++) {
+                newshape *= shape_[i];
+        }
+
+        // Create new shape
+        TensorShape old = shape_;
+        shape_.clear();
+        for (int i = 0; i < dim; i++) {
+                shape_.push_back(old[i]);
+        }
+        shape_.push_back(newshape);
+        return *this;
+}
+
 size_t Tensor::getIndex(const TensorShape& dims) const
 {
         int v_index = dims[0];

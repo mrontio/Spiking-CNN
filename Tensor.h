@@ -47,6 +47,7 @@ public:
 
         Tensor& reshape(const TensorShape& shape);
         Tensor& flatten();
+        Tensor& flatten(int dim);
 
         std::string shapeString () const;
         void fill(const float& value);
