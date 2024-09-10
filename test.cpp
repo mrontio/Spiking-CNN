@@ -3,33 +3,19 @@
 #include <memory>
 
 #include "Tensor.h"
-#include "Convolutional.h"
-#include "IntegrateFire.h"
-#include "AvgPool.h"
-#include "Linear.h"
+o#include "Convolutional.h"
+// #include "IntegrateFire.h"
+// #include "AvgPool.h"
+// #include "Linear.h"
 
 using namespace std;
 
-//#define DEBUG_WRITE
-#ifdef DEBUG_WRITE
-#define DEBUG_WRITE_CMD x->save("./tensors/layer" + to_string(count) + ".npy"); printf("Wrote ./tensors/layer/%d.npy\n", count++);
-#else
-#define DEBUG_WRITE_CMD
-#endif
-
 int main(int argc, char *argv[])
 {
-        auto s = TensorShape{};
-        auto data = make_unique<Tensor>(TensorShape{100, 16, 17, 17});
-        // data->fillDebug();
-        // data->save("./please.npy");
-
-        // auto l = Linear(Tensor("./weights/9-Linear.npy"));
-        // auto x = l.forward(*data);
-        data->flatten(2);
-        cout << data->shapeString() << endl;
-        //x->save("./lol.npy");
-
+        auto data = make_unique<Tensor>("/home/mrontio/data/nmnist-converted/0/593.npy");
+        auto input_shape = TensorShape{100, 2, 34, 34};
+        auto c0 = Convolutional(input_shape, Tensor("./weights/0-Conv2d.npy"), 1, {1, 1});
+        auto x = c0.forward(*data);
 
         return 0;
 }

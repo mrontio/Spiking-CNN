@@ -10,6 +10,9 @@ Tensor::Tensor()
 Tensor::Tensor(const std::string path)
 {
         auto npy = cnpy::npy_load(path);
+        if (npy.word_size != 4) {
+                throw std::runtime_error("Word size of imported numpy array is not 4.");
+        }
         const float* elements = npy.data<float>();
 
         shape_ = npy.shape;
