@@ -188,13 +188,11 @@ int Tensor::argmax() const {
         int argmax = -1;
         for (long unsigned int i = 0; i < shape_[0]; ++i) {
                 auto data = (*data_)[i];
-                cout << data << ",";
                 if (data > max) {
                         max = data;
                         argmax = i;
                 }
         }
-        cout << ":";
         return argmax;
 }
 
