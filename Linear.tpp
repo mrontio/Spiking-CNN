@@ -4,7 +4,7 @@ Linear::Linear(Tensor weights) :
         weights_(weights)
 {}
 
-std::unique_ptr<Tensor> Linear::forward(const Tensor& input)
+std::unique_ptr<Tensor> Linear::forward(Tensor& input)
 {
         auto timesteps = input.shape(0);
         auto output_shape = TensorShape{timesteps, weights_.shape(0)};

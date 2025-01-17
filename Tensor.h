@@ -26,6 +26,8 @@ private:
 
 
 public:
+        int count;
+
         Tensor();
         Tensor(const TensorShape& dims);
         Tensor(const std::string);
@@ -37,7 +39,7 @@ public:
         static TensorShape shave(const TensorShape& shape, const int n);
 
         float& operator[](const TensorShape& dims);
-        const float operator[](const TensorShape& dims) const;
+        //const float operator[](const TensorShape& dims);
 
         std::unique_ptr<Tensor> operator()(const TensorShape& shape);
 
@@ -56,7 +58,7 @@ public:
         const bool precisionEqual(const Tensor& other, const int precision) const;
 
         // For the following, we assume that shape = {100, 10}
-        std::unique_ptr<Tensor> sum() const;
+        std::unique_ptr<Tensor> sum() ;
         int argmax() const;
 
         const float* data() const;

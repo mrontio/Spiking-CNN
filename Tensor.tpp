@@ -4,10 +4,12 @@ using namespace std;
 
 Tensor::Tensor()
         : shape_(TensorShape()),
-          data_()
+          data_(),
+          count(0)
 {}
 
 Tensor::Tensor(const std::string path)
+        : count(0)
 {
         auto npy = cnpy::npy_load(path);
         if (npy.word_size != 4) {
@@ -20,7 +22,8 @@ Tensor::Tensor(const std::string path)
 }
 
 Tensor::Tensor(const TensorShape& dims)
-        : shape_(dims)
+        : shape_(dims),
+          count(0)
 {
         int size = 1;
         for (int n = 0; n < shape_.size(); n++) {
@@ -31,21 +34,24 @@ Tensor::Tensor(const TensorShape& dims)
 
 
 Tensor::Tensor(const cnpy::NpyArray& npy)
-        : shape_(npy.shape)
+        : shape_(npy.shape),
+          count(0)
 {
         const float* elements = npy.data<float>();
         data_ = make_unique<std::vector<float>>(elements, elements + getSize(shape_));
 }
 
 Tensor::Tensor(const Tensor& source)
-        : shape_(source.shape())
+        : shape_(source.shape()),
+          count(0)
 {
         const float* data = source.data();
         data_= make_unique<std::vector<float>>(data, data + getSize(shape_));
 }
 
 Tensor::Tensor(const float* source, const TensorShape& shape)
-        : shape_(shape)
+        : shape_(shape),
+          count(0)
 {
         data_ = make_unique<std::vector<float>>(source, source + getSize(shape));
 }
@@ -102,18 +108,18 @@ float& Tensor::operator[](const TensorShape& dims)
         if (dims.size() != shape_.size()) {
                 throw std::out_of_range("Tensor index out of range");
         }
-
+        ++count;
         return (*data_)[this->getIndex(dims)];
 }
 
-const float Tensor::operator[](const TensorShape& dims) const
-{
-        if (dims.size() != shape_.size()) {
-                throw std::out_of_range("Tensor index out of range");
-        }
-
-        return (*data_)[this->getIndex(dims)];
-}
+// const float Tensor::operator[](const TensorShape& dims)
+// {
+//         if (dims.size() != shape_.size()) {
+//                 throw std::out_of_range("Tensor index out of range");
+//         }
+//         count = count + 1;
+//         return (*data_)[this->getIndex(dims)];
+// }
 
 /**
    Sub-tensor operator.
@@ -169,7 +175,7 @@ const bool Tensor::precisionEqual(const Tensor& other, const int precision) cons
 }
 
 // Assume shape = {100, 10}
-std::unique_ptr<Tensor> Tensor::sum() const {
+std::unique_ptr<Tensor> Tensor::sum() {
         int axes = shape_[0];
         auto out = make_unique<Tensor>(TensorShape{shape_[1]});
         out->fill(0.0f);
